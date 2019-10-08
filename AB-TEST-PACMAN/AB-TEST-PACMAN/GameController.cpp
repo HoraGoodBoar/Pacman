@@ -21,7 +21,7 @@ bool isRunGame=false;
 
 bool FrameFunc()
 {
-	if (isRunGame &&  map.GhostEatPacman() || map.scoreMap==map.player.score){
+	if ((isRunGame &&  map.GhostEatPacman()) || map.scoreMap==map.player.score){
 		timeGameOver = (int)hge->Timer_GetTime();
 
 	}
