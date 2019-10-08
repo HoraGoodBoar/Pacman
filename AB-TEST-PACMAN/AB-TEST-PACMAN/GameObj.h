@@ -1,8 +1,8 @@
 #ifndef H_GAMEOBJ
 # define H_GAMEOBJ
 
-#include <hge.h>
-#include <hgesprite.h>
+#include "hge.h"
+#include "hgesprite.h"
 #include "DataStorage.h"
 
 class GameObj{

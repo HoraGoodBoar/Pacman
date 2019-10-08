@@ -1,7 +1,7 @@
-#include <hge.h>
-#include <hgesprite.h>
-#include <hgefont.h>
-#include <string> 
+#include "hge.h"
+#include "hgesprite.h"
+#include "hgefont.h"
+#include <string>
 #include <sstream>
 #include "MapsController.h"
 
