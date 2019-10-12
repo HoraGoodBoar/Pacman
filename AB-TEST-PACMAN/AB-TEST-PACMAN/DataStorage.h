@@ -8,7 +8,7 @@ public:
 	static const int WINDOW_WIDTH		=	1024;
 	static const int WINDOW_HEIGHT		=	768;
 	static const int WINDOW_FPS			=	100;
-	static const int PACMAN_SPEED		=	120;
+	static const int PACMAN_SPEED		=	220;
 	static const int GHOST_SPEED		=	100;
 	static const int SIZE_TEXTURE		=	32;
 	static const int MARGIN				=	48;

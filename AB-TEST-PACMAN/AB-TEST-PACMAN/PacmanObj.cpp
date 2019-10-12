@@ -72,4 +72,5 @@ void PacmanObj::Setup(){
 	isMove=false;
 	score=0;
 	direction=-1;
+	speed=DataStorage::PACMAN_SPEED;
 }
