@@ -233,7 +233,8 @@ bool ShowMenu(){
 		switch(lastid)
 		{
 			case 1:
-				timeGameOver += (int)hge->Timer_GetTime();
+				timeGameOver = (int)hge->Timer_GetTime() + DataStorage::TIME_GAMEOVER;
+				gui->Enter();
 				isPlayGame=true;
 				break;
 			case 2:  return true;
