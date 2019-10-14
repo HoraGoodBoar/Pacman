@@ -24,4 +24,6 @@ public:
 #define  TEXTURE_GHOST_1		"Texture/Ghost_0.png"
 #define  TEXTURE_GHOST_2		"Texture/Ghost_1.png"
 #define  TEXTURE_GHOST_3		"Texture/Ghost_2.png"
+#define  TEXTURE_BGMENU			"Texture/bg.png"
+#define  TEXTURE_CURSOR			"Texture/cursor.png"
 };

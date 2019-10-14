@@ -27,7 +27,11 @@ void MapsController::SetupMap(){
 	for(int i = 0; i < ROW; ++i){
 		map[i]=new byte[COLUMN]();
 	}
-	
+	// 0 wall
+	// 1 food
+	// 2 pacman
+	// 3 ghost
+	// 4 zero
 	byte _map[ROW][COLUMN]={ 
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 0
 		{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0}, // 1

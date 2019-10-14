@@ -21,12 +21,10 @@ HEFFECT  effectGamaWin;
 HSTREAM  musicBg;
 
 HEFFECT				snd;
-HTEXTURE			tex;
 hgeQuad				quad;
 
 hgeGUI				*gui;
 hgeFont				*fnt;
-hgeSprite			*spr;
 
 MapsController map;
 
@@ -66,6 +64,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	map.Setup(hge);
 	srand(time(NULL));
 	scoreLabel= new hgeFont(FONT_TEXT);
+	scoreLabel->SetColor(0xFFFFE060);
 	scoreLabel->SetScale(1.5);
 	isRunGame = true;
 
@@ -76,11 +75,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	musicBg = hge->Stream_Load("Sound/MusicBG.MOD");
 	hge->Stream_Play(musicBg,1);
 
-	quad.tex=hge->Texture_Load("bg.png");
-	tex=hge->Texture_Load("cursor.png");
+	quad.tex=hge->Texture_Load(TEXTURE_BGMENU);
 	snd=hge->Effect_Load("menu.wav");
 
-	if(!quad.tex || !tex || !snd)
+	if(!quad.tex ||  !snd)
 	{
 		hge->System_Shutdown();
 		return 0;
@@ -95,22 +93,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		quad.v[i].col=0xFFFFFFFF;
 	}
 
-	quad.v[0].x=0; quad.v[0].y=0; 
-	quad.v[1].x=DataStorage::WINDOW_WIDTH; quad.v[1].y=0; 
-	quad.v[2].x=DataStorage::WINDOW_WIDTH; quad.v[2].y=DataStorage::WINDOW_HEIGHT; 
-	quad.v[3].x=0; quad.v[3].y=DataStorage::WINDOW_HEIGHT; 
+	quad.v[0].x=0;							quad.v[0].y=0; 
+	quad.v[1].x=DataStorage::WINDOW_WIDTH;	quad.v[1].y=0; 
+	quad.v[2].x=DataStorage::WINDOW_WIDTH;	quad.v[2].y=DataStorage::WINDOW_HEIGHT; 
+	quad.v[3].x=0;							quad.v[3].y=DataStorage::WINDOW_HEIGHT; 
 	// Animation
 		
 	fnt=new hgeFont("font1.fnt");
 	fnt->SetScale(1.5);
-	spr=new hgeSprite(tex,0,0,32,32);
 
 	gui=new hgeGUI();
 
 	gui->AddCtrl(new hgeGUIMenuItem(1,fnt,snd,DataStorage::WINDOW_WIDTH/2,280,0.0f,"Play"));
 	gui->AddCtrl(new hgeGUIMenuItem(2,fnt,snd,DataStorage::WINDOW_WIDTH/2,360,0.2f,"Exit"));
 
-	gui->SetCursor(spr);
 
 	hge->System_Start();
 	
@@ -126,6 +122,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
   hge->Effect_Free(effectGamaOver);
   hge->Effect_Free(effectGamaWin);
   hge->Stream_Free(musicBg);
+
+  delete gui;
+  delete fnt;
+  hge->Effect_Free(snd);
+  hge->Texture_Free(quad.tex);
 
   hge->System_Shutdown();
   hge->Release();

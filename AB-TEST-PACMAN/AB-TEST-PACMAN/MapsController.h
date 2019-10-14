@@ -8,15 +8,19 @@ class MapsController{
 public:
 	void SetupMap();
 	void SetupWalls(HGE * _hge);
+
 	byte **map;
+
 	int scoreMap;
+
 	std::vector <GameObj> walls;
+	std::vector <Ghost> ghost;
 
 	PacmanObj player;
-	std::vector <Ghost> ghost;
 
 	MapsController();
 	~MapsController();
+
 	void Setup(HGE * _hge);
 	void RenderMap(float dt);
 	bool PossibleMove(int obj_col,int obj_row,int direction,int type,int currentPosGhost=0);
