@@ -5,29 +5,29 @@ void Ghost::Render(float dt,bool t){
 		switch(direction){
 			case 0:{
 				this->x -= speed * dt;
-				if(this->x < (float)(col * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN+DataStorage::SIZE_TEXTURE / 2)){
-					this->x = (float)(col * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN+DataStorage::SIZE_TEXTURE / 2);
+				if(this->x < (float)(col * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN+DataStorage::SIZE_TEXTURE *0.5)){
+					this->x = (float)(col * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN+DataStorage::SIZE_TEXTURE *0.5);
 					isMove=false;
 				}
 			}break;
 			case 1:{
 				this->x += speed * dt;
-				if(this->x > (float)(col * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN + DataStorage::SIZE_TEXTURE / 2)){
-					this->x = (float)(col * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN + DataStorage::SIZE_TEXTURE / 2);
+				if(this->x > (float)(col * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN + DataStorage::SIZE_TEXTURE *0.5)){
+					this->x = (float)(col * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN + DataStorage::SIZE_TEXTURE *0.5);
 					isMove = false;
 				}
 			}break;
 			case 2:{
 				this->y += speed * dt;
-				if(this->y > (float)(row * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN + DataStorage::SIZE_TEXTURE / 2)){
-					this->y = (float)(row * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN + DataStorage::SIZE_TEXTURE / 2);
+				if(this->y > (float)(row * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN + DataStorage::SIZE_TEXTURE *0.5)){
+					this->y = (float)(row * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN + DataStorage::SIZE_TEXTURE *0.5);
 					isMove = false;
 				}
 			}break;
 			case 3:{
 				this->y -= speed * dt;
-				if(this->y < (float)(row * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN + DataStorage::SIZE_TEXTURE / 2)){
-					this->y = (float)(row * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN + DataStorage::SIZE_TEXTURE / 2);
+				if(this->y < (float)(row * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN + DataStorage::SIZE_TEXTURE *0.5)){
+					this->y = (float)(row * DataStorage::SIZE_TEXTURE + DataStorage::MARGIN + DataStorage::SIZE_TEXTURE *0.5);
 					isMove = false;
 				}
 			}break;

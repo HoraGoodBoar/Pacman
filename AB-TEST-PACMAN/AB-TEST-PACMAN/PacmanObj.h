@@ -10,6 +10,7 @@ public:
 	int score;
 	float speed;
 	bool isMove;
+	byte XP;
 	void Render(float dt,bool t);
 	void LoadTexture(HGE * _hge);
 	void Setup();

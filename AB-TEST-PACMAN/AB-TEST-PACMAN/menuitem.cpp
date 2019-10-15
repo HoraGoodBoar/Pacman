@@ -21,7 +21,7 @@ hgeGUIMenuItem::hgeGUIMenuItem(int _id, hgeFont *_fnt, HEFFECT _snd, float _x, f
 	bEnabled=true;
 
 	w=fnt->GetStringWidth(title);
-	rect.Set(_x-w/2, _y, _x+w/2, _y+fnt->GetHeight());
+	rect.Set(_x-w*0.5, _y, _x+w*0.5, _y+fnt->GetHeight());
 }
 
 void hgeGUIMenuItem::Render()

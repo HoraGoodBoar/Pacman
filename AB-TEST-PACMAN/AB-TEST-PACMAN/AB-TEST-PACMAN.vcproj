@@ -180,11 +180,23 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\AutoPacmanObj.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\AutoPacmanObj.h"
+				>
+			</File>
+			<File
 				RelativePath=".\DataStorage.h"
 				>
 			</File>
 			<File
 				RelativePath=".\GameController.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GameController.h"
 				>
 			</File>
 			<File
@@ -201,6 +213,10 @@
 			</File>
 			<File
 				RelativePath=".\Ghost.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MainController.cpp"
 				>
 			</File>
 			<File

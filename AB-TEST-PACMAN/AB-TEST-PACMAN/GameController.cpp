@@ -1,71 +1,31 @@
-#include <hge.h>
-#include <hgesprite.h>
-#include "hgefont.h"
-#include <string>
-#include <sstream>
-#include "hgegui.h"
-#include "menuitem.h"
-#include "MapsController.h"
-#include <math.h>
+#include "GameController.h"
 
+GameController::GameController(){
+	hge = nullptr;
+	gui = nullptr;
+	fnt = nullptr;
 
-void PlayGame();
-bool ShowMenu();
-
-HGE *hge = 0;
-
-hgeFont *scoreLabel;
-
-HEFFECT  effectGamaOver;
-HEFFECT  effectGamaWin;
-HSTREAM  musicBg;
-
-HEFFECT				snd;
-hgeQuad				quad;
-
-hgeGUI				*gui;
-hgeFont				*fnt;
-
-MapsController map;
-
-int timeGameOver = DataStorage::TIME_GAMEOVER;
-int Record=0;
-
-bool isRunGame	= false;
-bool isPlayGame = false;
-
-bool FrameFunc()
-{
-	if(isPlayGame){
-		PlayGame();
-	}
-	else {
-		return ShowMenu();
-	}
-	
-	return false;
+	isRunGame	= false;
+	isPlayGame = false;
+	Record=0;
+	timeGameOver = DataStorage::TIME_GAMEOVER;
 }
 
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
-{
-  hge = hgeCreate(HGE_VERSION);
-  hge->System_SetState(HGE_FRAMEFUNC, FrameFunc);
-  hge->System_SetState(HGE_WINDOWED, true);
-  hge->System_SetState(HGE_USESOUND, true);
-  hge->System_SetState(HGE_WINDOWED, true);
-  hge->System_SetState(HGE_HIDEMOUSE, false);
-  hge->System_SetState(HGE_TITLE, TEXT_TITLE);
-  hge->System_SetState(HGE_FPS, DataStorage::WINDOW_FPS);
-  hge->System_SetState(HGE_SCREENWIDTH, DataStorage::WINDOW_WIDTH);
-  hge->System_SetState(HGE_SCREENHEIGHT, DataStorage::WINDOW_HEIGHT);
- 
-  if(hge->System_Initiate())
-  {
+GameController::~GameController(){
+	hge->Effect_Free(effectGamaOver);
+	hge->Effect_Free(effectGamaWin);
+	hge->Effect_Free(snd);
+	hge->Stream_Free(musicBg);
+}
+
+void GameController::Setup(HGE *_hge){
+	this->hge = _hge;
+
 	map.Setup(hge);
 	srand(time(NULL));
 	scoreLabel= new hgeFont(FONT_TEXT);
 	scoreLabel->SetColor(0xFFFFE060);
-	scoreLabel->SetScale(1.5);
+	scoreLabel->SetScale(1);
 	isRunGame = true;
 
 
@@ -78,11 +38,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	quad.tex=hge->Texture_Load(TEXTURE_BGMENU);
 	snd=hge->Effect_Load("menu.wav");
 
-	if(!quad.tex ||  !snd)
-	{
-		hge->System_Shutdown();
-		return 0;
-	}
 
 	// Animation
 	quad.blend=BLEND_ALPHABLEND | BLEND_COLORMUL | BLEND_NOZWRITE;
@@ -104,38 +59,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	gui=new hgeGUI();
 
-	gui->AddCtrl(new hgeGUIMenuItem(1,fnt,snd,DataStorage::WINDOW_WIDTH/2,280,0.0f,"Play"));
-	gui->AddCtrl(new hgeGUIMenuItem(2,fnt,snd,DataStorage::WINDOW_WIDTH/2,360,0.2f,"Exit"));
+	gui->AddCtrl(new hgeGUIMenuItem(1,fnt,snd,DataStorage::WINDOW_WIDTH*0.5,280,0.0f,"Play"));
+	gui->AddCtrl(new hgeGUIMenuItem(2,fnt,snd,DataStorage::WINDOW_WIDTH*0.5,360,0.2f,"Exit"));
 
 
-	hge->System_Start();
-	
-  }
-  
-  hge->Texture_Free(map.player.open);
-  hge->Texture_Free(map.player.close);
-
-  for(int i = 0; i < map.ghost.size(); ++i){
-	  hge->Texture_Free(map.ghost[i].texture);
-  }
-
-  hge->Effect_Free(effectGamaOver);
-  hge->Effect_Free(effectGamaWin);
-  hge->Stream_Free(musicBg);
-
-  delete gui;
-  delete fnt;
-  hge->Effect_Free(snd);
-  hge->Texture_Free(quad.tex);
-
-  hge->System_Shutdown();
-  hge->Release();
-
-  return 0;
 }
 
-void PlayGame(){
-if ((isRunGame &&  map.GhostEatPacman()) || map.scoreMap==map.player.score){
+void GameController::PlayGame(){
+	if ((isRunGame &&  map.GhostEatPacman()) || map.scoreMap == (map.player.score + map.autoplayer.score) ){
 		timeGameOver = (int)hge->Timer_GetTime();
 
 	}
@@ -151,7 +82,7 @@ if ((isRunGame &&  map.GhostEatPacman()) || map.scoreMap==map.player.score){
 			hge->Gfx_BeginScene();
 			hge->Gfx_Clear(0);
 
-			if(map.scoreMap == map.player.score){
+			if(map.scoreMap == (map.player.score + map.autoplayer.score)){
 				hge->Effect_Play(effectGamaWin);
 
 				scoreLabel->Render(500, 300, HGETEXT_CENTER, TEXT_WIN);
@@ -164,15 +95,16 @@ if ((isRunGame &&  map.GhostEatPacman()) || map.scoreMap==map.player.score){
 
 			hge->Gfx_EndScene();
 			
-			scoreLabel->SetScale(1.5);
+			scoreLabel->SetScale(1);
 
 			if(map.player.score>Record){
-				Record=map.player.score;
+				Record = map.player.score;
 			}
 
 			map.walls.clear();
 			map.ghost.clear();
 			map.player.Setup();
+			map.autoplayer.Setup();
 			map.scoreMap=0;
 			map.Setup(hge);
 		}
@@ -210,20 +142,31 @@ if ((isRunGame &&  map.GhostEatPacman()) || map.scoreMap==map.player.score){
 		std::stringstream scoretext;
 		std::stringstream timetext;
 		std::stringstream recordtext;
+		std::stringstream infoautopacman;
+		std::stringstream xppacman;
+		std::stringstream xpautopacman;
 
-		scoretext  << map.player.score;
-		timetext   << timeGameOver -(int)hge->Timer_GetTime();
-		recordtext << (map.player.score > Record ? map.player.score : Record);
+		scoretext			<< map.player.score;
+		xppacman			<< (int)map.player.XP;
+		timetext			<< timeGameOver -(int)hge->Timer_GetTime();
+		recordtext			<< (map.player.score > Record ? map.player.score : Record);
+		infoautopacman		<< map.autoplayer.score;
+		xpautopacman		<< (int)map.autoplayer.XP;
 
-		std::string text = "Score : \n\n"+scoretext.str() + "\n\nTime : \n\n"+timetext.str() +"\n\nRecord : \n\n" + recordtext.str();
+		std::string text =  "Pacman score : \n\n"+scoretext.str() + 
+							"\n\nPacman XP : \n\n"+xppacman.str() + 
+							"\n\nTime : \n\n"+timetext.str() +
+							"\n\nRecord : \n\n" + recordtext.str() + 
+							"\n\n AutoPacman score : \n\n" + infoautopacman.str() +
+							"\n\n AutoPacman XP : \n\n" + xpautopacman.str();
 		
-		scoreLabel->Render(900, 200, HGETEXT_CENTER, text.data());
+		scoreLabel->Render(900, 100, HGETEXT_CENTER, text.data());
 		
 		hge->Gfx_EndScene();
 	}
 }
 
-bool ShowMenu(){
+bool GameController::ShowMenu(){
 	float dt = hge->Timer_GetDelta();
 	int id;
 	static int lastid=0;
