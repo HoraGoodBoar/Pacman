@@ -35,6 +35,8 @@ public:
 
 	hgeGUI	*gui;
 
+	hgeSprite *bgGame;
+
 	MapsController map;
 
 	int timeGameOver;
@@ -42,5 +44,6 @@ public:
 
 	bool isRunGame;
 	bool isPlayGame;
+	bool isMusic;
 
 };

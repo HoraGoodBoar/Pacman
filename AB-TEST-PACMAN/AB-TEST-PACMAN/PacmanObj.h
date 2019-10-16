@@ -11,7 +11,7 @@ public:
 	float speed;
 	bool isMove;
 	byte XP;
-	void Render(float dt,bool t);
+	void Render(float dt,bool isPossibleMove);
 	void LoadTexture(HGE * _hge);
 	void Setup();
 };

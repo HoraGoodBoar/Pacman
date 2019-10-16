@@ -56,8 +56,8 @@ void MapsController::SetupMap(){
 		{ 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0}, // 5
 		{ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0}, // 4
 		{ 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0}, // 3
-		{ 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0}, // 2
-		{ 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 3, 1, 1, 5, 1, 3, 0}, // 1
+		{ 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0}, // 2
+		{ 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 1, 1, 5, 1, 1, 1, 1, 1, 3, 0}, // 1
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}  // 0
 
 	} ;
@@ -485,6 +485,16 @@ bool MapsController::PossibleMove(int obj_col,int obj_row,int direction,int type
 				down	= (obj_row + 1 < ROW && map[obj_row + 1][obj_col] != 0		&& TypeRadius(autoplayer.col,autoplayer.row, 2, DataStorage::RADIUS_AUTOPACMAN, 3) );
 				top		= (obj_row - 1 >= 0 && map[obj_row - 1][obj_col] != 0		&& TypeRadius(autoplayer.col,autoplayer.row, 3, DataStorage::RADIUS_AUTOPACMAN, 3) );
 				
+				if(!left && !right && !down && !top){
+					left	= obj_col - 1 >= 0 && map[obj_row][obj_col - 1] != 0;	
+					right	= obj_col + 1 < COLUMN && map[obj_row][obj_col + 1] !=0;
+					down	= obj_row + 1 < ROW && map[obj_row + 1][obj_col] != 0;
+					top		= obj_row - 1 >= 0 && map[obj_row - 1][obj_col] != 0;
+					if(!left && !right && !down && !top){
+						direction=-1;
+					}
+				}
+
 				switch(direction){
 					case 0 : case 1 : {
 						if(top && down){
@@ -641,7 +651,7 @@ bool MapsController::GhostEatPacman(){
 	
 	if(player.col == autoplayer.col && player.row == autoplayer.row){
 		if(player.direction == 0 || player.direction == 1){
-			if(player.x + 32 >= autoplayer.x && player.x - 32 <= autoplayer.x){
+			if(player.x + DataStorage::RADIUS_TOUCH >= autoplayer.x && player.x - DataStorage::RADIUS_TOUCH <= autoplayer.x){
 				int _x=-1,_y=-1;
 				while(true){
 					_x = rand()% DataStorage::COLUMN_MAP;
@@ -695,7 +705,7 @@ bool MapsController::GhostEatPacman(){
 			}
 		}
 		else if(player.direction == 2 || player.direction == 3){
-			if( player.y + 32 >= autoplayer.y && player.y - 32 <= autoplayer.y ){
+			if( player.y + DataStorage::RADIUS_TOUCH >= autoplayer.y && player.y - DataStorage::RADIUS_TOUCH <= autoplayer.y ){
 				int _x=-1,_y=-1;
 				while(true){
 					_x = rand()% DataStorage::COLUMN_MAP;
@@ -753,7 +763,7 @@ bool MapsController::GhostEatPacman(){
 	for(int i = 0; i < ghost.size(); ++i){
 		if(player.col == ghost[i].col && player.row == ghost[i].row){
 			if(player.direction == 0 || player.direction == 1){
-				if(player.x + 32 >= ghost[i].x && player.x - 32 <= ghost[i].x){
+				if(player.x + DataStorage::RADIUS_TOUCH >= ghost[i].x && player.x - DataStorage::RADIUS_TOUCH <= ghost[i].x){
 					if(player.XP>1)
 					{
 						--player.XP;
@@ -765,7 +775,7 @@ bool MapsController::GhostEatPacman(){
 				}
 			}
 			else if(player.direction == 2 || player.direction == 3){
-				if( player.y + 32 >= ghost[i].y && player.y - 32 <= ghost[i].y ){
+				if( player.y + DataStorage::RADIUS_TOUCH >= ghost[i].y && player.y - DataStorage::RADIUS_TOUCH <= ghost[i].y ){
 					if(player.XP>1)
 					{
 						--player.XP;
@@ -782,7 +792,7 @@ bool MapsController::GhostEatPacman(){
 	for(int i = 0; i < ghost.size(); ++i){
 		if(autoplayer.col == ghost[i].col && autoplayer.row == ghost[i].row){
 			if(autoplayer.direction == 0 || autoplayer.direction == 1){
-				if(autoplayer.x + 32 >= ghost[i].x && autoplayer.x - 32 <= ghost[i].x){
+				if(autoplayer.x + DataStorage::RADIUS_TOUCH >= ghost[i].x && autoplayer.x - DataStorage::RADIUS_TOUCH <= ghost[i].x){
 					if(autoplayer.XP>1)
 					{
 						--autoplayer.XP;
@@ -794,7 +804,7 @@ bool MapsController::GhostEatPacman(){
 				}
 			}
 			else if(autoplayer.direction == 2 || autoplayer.direction == 3){
-				if( autoplayer.y + 32 >= ghost[i].y && autoplayer.y - 32 <= ghost[i].y ){
+				if( autoplayer.y + DataStorage::RADIUS_TOUCH >= ghost[i].y && autoplayer.y - DataStorage::RADIUS_TOUCH <= ghost[i].y ){
 					if(autoplayer.XP>1)
 					{
 						--autoplayer.XP;
@@ -823,6 +833,9 @@ bool MapsController::TypeRadius(int _col,int _row, int _direction, int _radius, 
 					answer = false;
 					break;
 				}
+				else if(map[_row][_col - i]==0){
+					break;
+				}
 			}
 		}break;
 		case 1:{
@@ -832,6 +845,9 @@ bool MapsController::TypeRadius(int _col,int _row, int _direction, int _radius, 
 				}
 				if(map[_row][_col + i]==_typeFind){
 					answer = false;
+					break;
+				}
+				else if(map[_row][_col + i]==0){
 					break;
 				}
 			}
@@ -845,6 +861,9 @@ bool MapsController::TypeRadius(int _col,int _row, int _direction, int _radius, 
 					answer = false;
 					break;
 				}
+				else if(map[_row + i][_col]==0){
+					break;
+				}
 			}
 		}break;
 		case 3:{
@@ -854,6 +873,9 @@ bool MapsController::TypeRadius(int _col,int _row, int _direction, int _radius, 
 				}
 				if(map[_row - i][_col]==_typeFind){
 					answer = false;
+					break;
+				}
+				else if(map[_row - i][_col]==0){
 					break;
 				}
 			}

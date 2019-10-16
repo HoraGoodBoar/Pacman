@@ -71,6 +71,7 @@ void AutoPacmanObj::LoadTexture(HGE * _hge){
 }
 
 void AutoPacmanObj::Setup(){
+	XP = 1;
 	isMove=false;
 	score=0;
 	direction = rand()%4;

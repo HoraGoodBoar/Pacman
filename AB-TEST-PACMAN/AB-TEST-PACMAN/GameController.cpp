@@ -6,8 +6,11 @@ GameController::GameController(){
 	fnt = nullptr;
 
 	isRunGame	= false;
-	isPlayGame = false;
+	isPlayGame	= false;
+	isMusic		= true;
+
 	Record=0;
+
 	timeGameOver = DataStorage::TIME_GAMEOVER;
 }
 
@@ -36,8 +39,9 @@ void GameController::Setup(HGE *_hge){
 	hge->Stream_Play(musicBg,1);
 
 	quad.tex=hge->Texture_Load(TEXTURE_BGMENU);
-	snd=hge->Effect_Load("menu.wav");
-
+	snd = hge->Effect_Load("menu.wav");
+	
+	bgGame = new hgeSprite(_hge->Texture_Load(TEXTURE_BGGAME), 0, 0, DataStorage::WINDOW_WIDTH, DataStorage::WINDOW_HEIGHT);
 
 	// Animation
 	quad.blend=BLEND_ALPHABLEND | BLEND_COLORMUL | BLEND_NOZWRITE;
@@ -83,15 +87,15 @@ void GameController::PlayGame(){
 
 			hge->Gfx_BeginScene();
 			hge->Gfx_Clear(0);
-
+			
 			if(map.scoreMap == (map.player.score + map.autoplayer.score)){
 				hge->Effect_Play(effectGamaWin);
-
+				bgGame->Render(0,0);
 				scoreLabel->Render(500, 300, HGETEXT_CENTER, TEXT_WIN);
 			}
 			else{
 				hge->Effect_Play(effectGamaOver);
-
+				bgGame->Render(0,0);
 				scoreLabel->Render(500, 300, HGETEXT_CENTER, TEXT_GAMEOVER);
 			}
 
@@ -142,6 +146,7 @@ void GameController::PlayGame(){
 		hge->Gfx_BeginScene();
 		hge->Gfx_Clear(0);
 
+		bgGame->Render(0,0);
 		map.RenderMap(dt);
 
 		if(map.player.score>Record){

@@ -1,7 +1,7 @@
 #include "PacmanObj.h"
 
-void PacmanObj::Render(float dt,bool t){
-	if(t){
+void PacmanObj::Render(float dt,bool isPossibleMove){
+	if(isPossibleMove){
 		switch(direction){
 			case 0:{
 				this->sprite->SetFlip(true,false);
@@ -70,6 +70,7 @@ void PacmanObj::LoadTexture(HGE * _hge){
 }
 
 void PacmanObj::Setup(){
+	XP = 1;
 	isMove=false;
 	score=0;
 	direction=-1;
