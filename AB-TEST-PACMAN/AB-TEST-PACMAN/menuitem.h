@@ -16,6 +16,7 @@ public:
 	virtual void	MouseOver(bool bOver);
 
 	virtual bool	MouseLButton(bool bDown);
+	virtual bool	KeyClick(int key, int chr);
 
 private:
 	hgeFont		*fnt;

@@ -9,7 +9,7 @@ public:
 	static const int WINDOW_HEIGHT		=	768;
 	static const int WINDOW_FPS			=	100;
 	static const int PACMAN_SPEED		=	150;
-	static const int AUTOPACMAN_SPEED	=	100;
+	static const int AUTOPACMAN_SPEED	=	150;
 	static const int GHOST_SPEED		=	100;
 	static const int SIZE_TEXTURE		=	32;
 	static const int MARGIN				=	48;
@@ -31,4 +31,14 @@ public:
 #define  TEXTURE_BGMENU				"Texture/bg.png"
 #define  TEXTURE_CURSOR				"Texture/cursor.png"
 #define  TEXTURE_LIFE				"Texture/life.png"
+#define  FILE_PATH					"datastorage.txt"
+
+	static int LoadFile(HGE * _hge, char * _section, char * _name){
+		int answer = _hge->Ini_GetInt(_section,_name, 0);
+		return answer;
+	}
+
+	static void SaveToFile(HGE * _hge, int _value, char * _section, char * _name){
+		_hge->Ini_SetInt(_section,_name,_value);
+	}
 };

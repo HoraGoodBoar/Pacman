@@ -82,6 +82,26 @@ void hgeGUIMenuItem::MouseOver(bool bOver)
 		gui->SetFocus(id);
 }
 
+bool hgeGUIMenuItem::KeyClick(int key, int chr){
+
+	if(key == HGEK_UP || key == HGEK_LEFT){
+		hge->Effect_Play(snd);
+		
+		gui->SetFocus(1);
+	}
+	else if(key == HGEK_DOWN || key == HGEK_RIGHT){
+		hge->Effect_Play(snd);
+		
+		gui->SetFocus(2);
+	}
+	else if(key == HGEK_ENTER){
+		hge->Effect_Play(snd);
+		offset=4;
+		return true;
+	}
+	return false;
+}
+
 
 bool hgeGUIMenuItem::MouseLButton(bool bDown)
 {

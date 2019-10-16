@@ -62,7 +62,9 @@ void GameController::Setup(HGE *_hge){
 	gui->AddCtrl(new hgeGUIMenuItem(1,fnt,snd,DataStorage::WINDOW_WIDTH*0.5,280,0.0f,"Play"));
 	gui->AddCtrl(new hgeGUIMenuItem(2,fnt,snd,DataStorage::WINDOW_WIDTH*0.5,360,0.2f,"Exit"));
 
+	gui->SetFocus(1);
 
+	Record = DataStorage::LoadFile(_hge,"Game","Record");
 }
 
 void GameController::PlayGame(){
@@ -107,6 +109,8 @@ void GameController::PlayGame(){
 			map.autoplayer.Setup();
 			map.scoreMap=0;
 			map.Setup(hge);
+
+
 		}
 		else if(timeGameOver -(int)hge->Timer_GetTime() == -DataStorage::TIME_SHOW_ENDGAME){
 			timeGameOver += DataStorage::TIME_GAMEOVER + DataStorage::TIME_SHOW_ENDGAME;
@@ -114,6 +118,7 @@ void GameController::PlayGame(){
 			musicBg = hge->Stream_Load("Sound/MusicBG.MOD");
 			hge->Stream_Play(musicBg, 1);
 			isPlayGame=false;
+			gui->SetFocus(1);
 		}
 	}
 	else{
@@ -138,6 +143,10 @@ void GameController::PlayGame(){
 		hge->Gfx_Clear(0);
 
 		map.RenderMap(dt);
+
+		if(map.player.score>Record){
+			Record = map.player.score;
+		}
 		
 		std::stringstream scoretext;
 		std::stringstream timetext;
@@ -149,7 +158,7 @@ void GameController::PlayGame(){
 		scoretext			<< map.player.score;
 		xppacman			<< (int)map.player.XP;
 		timetext			<< timeGameOver -(int)hge->Timer_GetTime();
-		recordtext			<< (map.player.score > Record ? map.player.score : Record);
+		recordtext			<< Record ;
 		infoautopacman		<< map.autoplayer.score;
 		xpautopacman		<< (int)map.autoplayer.XP;
 
