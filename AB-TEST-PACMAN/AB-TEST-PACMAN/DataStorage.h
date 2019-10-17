@@ -13,7 +13,7 @@ public:
 	static const int GHOST_SPEED		=	100;
 	static const int SIZE_TEXTURE		=	32;
 	static const int MARGIN				=	48;
-	static const int RADIUS_AUTOPACMAN	=	2;
+	static const int RADIUS_AUTOPACMAN	=	3;
 	static const int RADIUS_TOUCH		=	32;
 
 #define  TEXTURE_PACMAN_OPEN		"Texture/pacman_open.png"
